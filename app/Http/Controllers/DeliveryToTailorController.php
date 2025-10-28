@@ -12,9 +12,38 @@ class DeliveryToTailorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index()
     {
         $deliveries = DeliveryToTailor::with(['courier', 'tailor'])->latest()->get();
+
+        foreach ($deliveries as $delivery) {
+            switch ($delivery->status) {
+                case 'selesai':
+                    $delivery->status_label = 'Selesai';
+                    $delivery->status_class = 'bg-success';
+                    $delivery->action_type = 'none';
+                    break;
+
+                case 'pickup':
+                    $delivery->status_label = 'Pickup';
+                    $delivery->status_class = 'bg-info text-dark';
+                    $delivery->action_type = 'finish';
+                    $delivery->action_label = 'Selesaikan Penjemputan';
+                    $delivery->action_class = 'btn-info';
+                    break;
+
+                case 'partial':
+                case 'delivery': // ⬅️ dua status ini sama-sama bisa mulai pickup
+                default:
+                    $delivery->status_label = ucfirst($delivery->status);
+                    $delivery->status_class = 'bg-warning text-dark';
+                    $delivery->action_type = 'start';
+                    $delivery->action_label = 'Ambil Barang';
+                    $delivery->action_class = 'btn-warning';
+                    break;
+            }
+        }
+
         $couriers = Courier::all();
         $tailors = Tailor::all();
 
@@ -43,20 +72,19 @@ class DeliveryToTailorController extends Controller
             'material_weight' => 'required|numeric|min:0',
         ]);
 
+        $validated['remaining'] = $validated['material_weight'];
+
         if ($request->id) {
-            // UPDATE
-            $validated['remaining'] = $validated['material_weight'];
             $delivery = DeliveryToTailor::findOrFail($request->id);
             $delivery->update($validated);
             return redirect()->route('delivery-to-tailor.index')->with('success', 'Data pengantaran berhasil diperbarui!');
         } else {
-            // CREATE baru
-            $validated['remaining'] = $validated['material_weight'];
-            $validated['status'] = 'proses';
+            $validated['status'] = 'delivery';
             DeliveryToTailor::create($validated);
             return redirect()->route('delivery-to-tailor.index')->with('success', 'Data pengantaran berhasil ditambahkan!');
         }
     }
+
 
     public function takeResult(Request $request, $id)
     {
@@ -65,18 +93,53 @@ class DeliveryToTailorController extends Controller
         ]);
 
         $delivery = DeliveryToTailor::findOrFail($id);
-
         $delivery->remaining -= $validated['amount_taken'];
+
         if ($delivery->remaining <= 0) {
             $delivery->remaining = 0;
-            $delivery->status = 'selesai';
-        } elseif ($delivery->remaining < $delivery->material_weight) {
-            $delivery->status = 'sebagian';
+            $delivery->status = 'selesai'; // semua barang diambil
+        } else {
+            $delivery->status = 'partial'; // masih ada sisa
         }
 
         $delivery->save();
 
         return redirect()->route('delivery-to-tailor.index')->with('success', 'Pengambilan hasil berhasil diperbarui!');
+    }
+
+
+    public function startPickup($id)
+    {
+        $delivery = DeliveryToTailor::findOrFail($id);
+        $delivery->status = 'pickup';
+        $delivery->save();
+
+        return back()->with('success', 'Kurir mulai proses penjemputan hasil jahit.');
+    }
+
+
+    public function finishPickup(Request $request, $id)
+    {
+        $request->validate([
+            'pickup_weight' => 'required|numeric|min:0',
+            'pickup_date' => 'required|date',
+        ]);
+
+        $delivery = DeliveryToTailor::findOrFail($id);
+        $delivery->pickup_weight = $request->pickup_weight;
+        $delivery->pickup_date = $request->pickup_date;
+
+        $delivery->remaining = max(0, $delivery->remaining - $request->pickup_weight);
+
+        if ($delivery->remaining <= 0) {
+            $delivery->status = 'selesai';
+        } else {
+            $delivery->status = 'partial'; // masih ada sisa
+        }
+
+        $delivery->save();
+
+        return back()->with('success', 'Penjemputan selesai dan barang diterima di konveksi.');
     }
 
     /**

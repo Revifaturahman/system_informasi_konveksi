@@ -38,6 +38,9 @@ Route::prefix('operation')->group(function () {
     Route::resource('delivery-to-tailor', DeliveryToTailorController::class);
     Route::post('delivery-to-tailor/{id}/take-result', [DeliveryToTailorController::class, 'takeResult'])
     ->name('delivery-to-tailor.take-result');
+    Route::post('/delivery-to-tailor/{id}/start-pickup', [DeliveryToTailorController::class, 'startPickup'])->name('delivery-to-tailor.start-pickup');
+    Route::post('/delivery-to-tailor/{id}/finish-pickup', [DeliveryToTailorController::class, 'finishPickup'])->name('delivery-to-tailor.finish-pickup');
+
 
     // To Obras
     Route::resource('delivery-to-obras', DeliveryToObrasController

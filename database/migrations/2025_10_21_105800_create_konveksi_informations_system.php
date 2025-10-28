@@ -102,7 +102,12 @@ return new class extends Migration
             $table->date('due_date')->nullable(); // tanggal jatuh tempo
             $table->decimal('material_weight', 5, 2)->nullable(); // total kain
             $table->decimal('remaining', 5, 2)->default(0); // sisa kain (kg)
-            $table->string('status', 20)->default('pending'); // pending, delivered, in progress, etc.
+            $table->float('pickup_weight')->nullable();
+            $table->dateTime('pickup_date')->nullable();
+            $table->enum('status', ['delivery', 'pickup', 'done', 'partial', 'selesai'])->default('delivery');
+
+
+
             $table->timestamps();
 
             // relasi
