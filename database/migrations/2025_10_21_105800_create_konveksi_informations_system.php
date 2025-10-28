@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('phone_number', 15)->nullable();
             $table->text('address')->nullable();
             $table->decimal('rate_per_piece', 10, 2)->default(0);
-            $table->decimal('latitude', 10, 6)->nullable();
-            $table->decimal('longitude', 10, 6)->nullable();
+            $table->decimal('latitude', 11, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamps();
         });
 

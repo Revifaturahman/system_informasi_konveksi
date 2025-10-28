@@ -1,0 +1,22 @@
+<?php
+
+use App\Http\Controllers\Api\RouteController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+
+Route::post('/courier-location', function (Request $request) {
+    DB::table('courier_tracking')->insert([
+        'courier_id' => 1, // hardcode sementara
+        'date' => now()->toDateString(),
+        'latitude' => $request->latitude,
+        'longitude' => $request->longitude,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return response()->json(['message' => 'Lokasi berhasil disimpan']);
+});
+
+
+Route::get('/delivery/{id}/route', [RouteController::class, 'getRoute']);

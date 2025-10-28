@@ -71,14 +71,15 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">latitude</label>
-                    <input type="text" class="form-control" name="latitude" id="latitude" required>
-                </div>
+                    <label class="form-label">Latitude</label>
+                    <input type="number" class="form-control" name="latitude" id="latitude" step="any" required>
+                    </div>
 
-                <div class="mb-3">
-                    <label class="form-label">longitude</label>
-                    <input type="text" class="form-control" name="longitude" id="longitude" required>
-                </div>
+                    <div class="mb-3">
+                    <label class="form-label">Longitude</label>
+                    <input type="number" class="form-control" name="longitude" id="longitude" step="any" required>
+                    </div>
+
             </div>
 
             <div class="modal-footer">
