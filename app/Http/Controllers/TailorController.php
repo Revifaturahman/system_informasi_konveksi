@@ -34,6 +34,8 @@ class TailorController extends Controller
         'phone_number' => 'required|string|max:20',
         'address' => 'required|string|max:255',
         'rate_per_piece' => 'required|numeric',
+        'latitude' => 'required|string|max:100',
+        'longitude' => 'required|string|max:100',
     ]);
 
     if ($request->id) {

@@ -72,12 +72,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">latitude</label>
-                    <input type="number" class="form-control" name="latitude" id="latitude" required>
+                    <input type="text" class="form-control" name="latitude" id="latitude" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">longitude</label>
-                    <input type="number" class="form-control" name="longitude" id="longitude" required>
+                    <input type="text" class="form-control" name="longitude" id="longitude" required>
                 </div>
             </div>
 

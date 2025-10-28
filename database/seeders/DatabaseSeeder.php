@@ -86,5 +86,10 @@ class DatabaseSeeder extends Seeder
             ['date_out' => '2025-10-04', 'product_variant_id' => 11, 'quantity_out' => 4, 'notes' => 'Pesanan reseller', 'created_at' => $now, 'updated_at' => $now],
         ];
         DB::table('clothes_out_warehouse')->insert($clothesOut);
+
+        $tailor = [
+            ['name' => 'Revi', 'phone_number' => '09876543321', 'address' => 'Bandung', 'rate_per_piece' => 5000, 'latitude' => '-6.953306544784432', 'longitude' => '107.58220827953811', 'created_at' => $now, 'updated_at' => $now],
+        ];
+        DB::table('tailors')->insert($tailor);
     }
 }
