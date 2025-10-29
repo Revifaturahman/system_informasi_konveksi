@@ -8,6 +8,39 @@ use Illuminate\Support\Facades\Http;
 
 class RouteController extends Controller
 {
+
+    public function getAllDeliveries()
+    {
+        $courier = auth('courier')->user(); // ✅ ambil dari guard courier
+
+        if (!$courier) {
+            return response()->json(['error' => 'Kurir belum login.'], 401);
+        }
+
+        $deliveries = DeliveryToTailor::with('tailor')
+            ->where('courier_id', $courier->id)
+            ->get(['id', 'tailor_id', 'status', 'delivery_date', 'due_date']);
+
+        if ($deliveries->isEmpty()) {
+            return response()->json(['message' => 'Tidak ada pengantaran untuk kurir ini.']);
+        }
+
+        $data = $deliveries->map(fn($d) => [
+            'delivery_id' => $d->id,
+            'tailor' => $d->tailor->name ?? '-',
+            'status' => $d->status,
+            'delivery_date' => $d->delivery_date,
+            'due_date' => $d->due_date,
+        ]);
+
+        return response()->json([
+            'courier' => $courier->name,
+            'total_deliveries' => $data->count(),
+            'deliveries' => $data,
+        ]);
+    }
+
+
     public function getRoute($id)
     {
         // Hardcode titik konveksi (misalnya konveksi di Bandung)
@@ -32,7 +65,7 @@ class RouteController extends Controller
             "$konveksiLng,$konveksiLat"  // kembali lagi ke konveksi
         ];
 
-        $url = 'http://router.project-osrm.org/route/v1/driving/' . implode(';', $coordinates) . '?overview=full&geometries=geojson';
+        $url = 'http://router.project-osrm.org/route/v1/driving/' . implode(';', $coordinates) . '?overview=full&geometries=geojson&steps=true';
 
         $response = Http::get($url);
 
@@ -44,7 +77,7 @@ class RouteController extends Controller
 
         return response()->json([
             'delivery_id' => $id,
-            'courier' => $delivery->courier->user->name ?? '-',
+            'courier' => $delivery->courier->name ?? '-',
             'tailor' => $delivery->tailor->name ?? '-',
             'status' => $delivery->status, // ← tambah status di sini
             'route' => $data['routes'][0] ?? null,

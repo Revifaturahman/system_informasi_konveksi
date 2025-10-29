@@ -42,7 +42,7 @@
                     <label class="form-label">User</label>
                     <select class="form-select" name="user_id" id="user_id" required>
                         <option value="">-- Select User --</option>
-                        @foreach ($users as $user)
+                        @foreach ($couriers as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
                     </select>

@@ -12,9 +12,8 @@ class CourierController extends Controller
      */
     public function index()
     {
-        $couriers = Courier::with('user')->latest()->get();
-        $users = User::all();
-        return view('employe.courier', compact('couriers', 'users'));
+        $couriers = Courier::all();
+        return view('employe.courier', compact('couriers'));
     }
 
     /**

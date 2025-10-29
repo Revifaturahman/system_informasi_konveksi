@@ -40,7 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'courier' => [
+        'driver' => 'sanctum', // kalau pakai Sanctum
+        'provider' => 'couriers',
     ],
+    ],
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -64,6 +69,10 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
+        'couriers' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Courier::class,
+    ],
 
         // 'users' => [
         //     'driver' => 'database',

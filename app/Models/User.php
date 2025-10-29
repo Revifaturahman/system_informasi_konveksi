@@ -44,8 +44,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function courier()
-    {
-        return $this->hasOne(Courier::class);
-    }
+    // public function courier()
+    // {
+    //     return $this->hasOne(Courier::class);
+    // }
 }

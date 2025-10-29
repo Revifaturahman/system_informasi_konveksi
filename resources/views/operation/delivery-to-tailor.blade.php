@@ -32,7 +32,7 @@
                             <label>Kurir</label>
                             <select name="courier_id" id="courier_id" class="form-select">
                                 @foreach ($couriers as $c)
-                                    <option value="{{ $c->id }}">{{ $c->user->name }}</option>
+                                    <option value="{{ $c->id }}">{{ $c->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -91,7 +91,7 @@
                 <tbody>
                     @forelse($deliveries as $d)
                         <tr>
-                            <td>{{ $d->courier->user->name ?? '-' }}</td>
+                            <td>{{ $d->courier->name ?? '-' }}</td>
                             <td>{{ $d->tailor->name ?? '-' }}</td>
                             <td>{{ $d->delivery_date }}</td>
                             <td>{{ $d->due_date ?? '-' }}</td>
