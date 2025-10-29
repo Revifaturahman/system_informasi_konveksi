@@ -1,17 +1,25 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Courier extends Model
+class Courier extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
 
     protected $table = 'couriers';
-    protected $fillable = ['user_id', 'phone_number'];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'phone_number',
+        'status',
+        'device_token'
+    ];
+
+    protected $hidden = ['password', 'remember_token'];
 }
+

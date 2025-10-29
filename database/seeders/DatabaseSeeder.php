@@ -8,6 +8,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
@@ -24,19 +25,35 @@ class DatabaseSeeder extends Seeder
         /** --------------------------
          * 1️⃣  SEED USER + COURIER
          * -------------------------- */
-        for ($i = 1; $i <= 5; $i++) {
-            $user = User::create([
-                'name' => 'Kurir ' . $i,
-                'email' => 'kurir' . $i . '@example.com',
-                'password' => Hash::make('password'),
-                'role' => 'courier',
-            ]);
-
-            Courier::create([
-                'user_id' => $user->id,
-                'phone_number' => '08' . fake()->numerify('##########'),
-            ]);
-        }
+        DB::table('couriers')->insert([
+            [
+                'name' => 'Kurir 1',
+                'username' => 'kurir1',
+                'password' => Hash::make('password123'),
+                'phone_number' => '081234567890',
+                'device_token' => Str::random(60),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Kurir 2',
+                'username' => 'kurir2',
+                'password' => Hash::make('password123'),
+                'phone_number' => '081234567891',
+                'device_token' => Str::random(60),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Kurir 3',
+                'username' => 'kurir3',
+                'password' => Hash::make('password123'),
+                'phone_number' => '081234567892',
+                'device_token' => Str::random(60),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
 
         /** --------------------------
          * 2️⃣  SEED PRODUK & GUDANG

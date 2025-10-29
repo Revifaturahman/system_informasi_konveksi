@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CourierAuthController;
 use App\Http\Controllers\Api\RouteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +22,4 @@ Route::post('/courier-location', function (Request $request) {
 
 
 Route::get('/delivery/{id}/route', [RouteController::class, 'getRoute']);
+Route::post('/courier/login', [CourierAuthController::class, 'login']);

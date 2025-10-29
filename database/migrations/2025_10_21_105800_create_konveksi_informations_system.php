@@ -25,11 +25,12 @@ return new class extends Migration
 
         Schema::create('couriers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('phone_number', 15)->nullable();
+            $table->string('name', 100);               // nama kurir
+            $table->string('username', 100)->unique();    // email login
+            $table->string('password');                // password hashed
+            $table->string('phone_number', 15)->nullable(); // nomor HP
+            $table->string('device_token')->nullable();      // optional, untuk push notification
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         // Added: cutters (pemotong) + coordinates
